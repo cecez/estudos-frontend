@@ -1,0 +1,1 @@
+- React é uma biblioteca JavaScript para construir interfaces de usuário
