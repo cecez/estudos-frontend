@@ -1,0 +1,2 @@
+- React é uma biblioteca JavaScript para construir interfaces de usuário
+- NextJS é um framework (sobre o React) para construir aplicações
