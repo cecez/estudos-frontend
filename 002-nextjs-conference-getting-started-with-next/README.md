@@ -22,3 +22,20 @@ Outros componentes Next:
             - Conteúdo é gerado no build
         - Permite o uso de CDN para armazenar o conteúdo gerado
         - Opção de renderizar com "Edge" (Edge rendering [4]), permitindo retornar conteúdo estático e dinâmico
+
+- Data fetching methods
+    - getServerSideProps
+    - API Routes
+    - Client-side data fetching
+    - Edge functions
+
+- Styling options with Next.js
+    - CSS Modules
+        - minified and code-split for performance
+        - prefixed to support older browsers
+        - scoped at the component level
+    - Global CSS or Sass Stylesheets
+    - CSS Frameworks (p. ex: tailwind)
+    - CSS-in-JS Libraries
+
+- curso interativo: nextjs.org/learn

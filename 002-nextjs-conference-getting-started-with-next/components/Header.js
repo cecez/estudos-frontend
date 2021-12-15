@@ -1,4 +1,5 @@
 import Link from "next/link"
+import styles from "./Header.module.css"
 
 export default function Header({ titulo }) 
 {
@@ -18,6 +19,6 @@ export default function Header({ titulo })
                 </Link>
             </li>
         </ul>
-        <h1>{ titulo } (header aqui)</h1>
+        <h1 className={ styles.title }>{ titulo } (header aqui)</h1>
     </div> 
 }
