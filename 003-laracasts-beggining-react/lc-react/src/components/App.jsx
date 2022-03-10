@@ -1,6 +1,9 @@
 import "../reset.css";
 import "../App.css";
+import TodoForm from "./TodoForm";
+import NoTodos from "./NoTodos";
 import { useState } from "react";
+import TodoList from "./TodoList";
 
 function App() {
   const [todos, setTodos] = useState([
@@ -19,29 +22,16 @@ function App() {
   ]);
   const [idForTodo, setIdForTodo] = useState(3);
 
-  const addTodo = (event) => {
-    event.preventDefault();
-
-    if (todoInput.trim().length === 0) {
-      return;
-    }
-
+  const addTodo = (title) => {
     setTodos([
       ...todos,
       {
         id: idForTodo,
-        title: todoInput,
+        title: title,
         isComplete: false,
       },
     ]);
-    setTodoInput("");
     setIdForTodo((previousId) => previousId + 1);
-  };
-
-  const [todoInput, setTodoInput] = useState("");
-
-  const handleInput = (event) => {
-    setTodoInput(event.target.value);
   };
 
   const handleDelete = (todoId) => {
@@ -97,91 +87,40 @@ function App() {
     <div className="todo-app-container">
       <div className="todo-app">
         <h2>Todo App</h2>
-        <form action="#" onSubmit={addTodo}>
-          <input
-            type="text"
-            value={todoInput}
-            onChange={handleInput}
-            className="todo-input"
-            placeholder="What do you need to do?"
-          />
-        </form>
+        <TodoForm addTodo={addTodo} />
 
-        <ul className="todo-list">
-          {todos.map((item, _index) => (
-            <li className="todo-item-container" key={item.id}>
-              <div className="todo-item">
-                <input
-                  type="checkbox"
-                  onChange={() => toggleCheckItem(item.id)}
-                  checked={item.isComplete}
-                />
-                {item.isEditing ? (
-                  <input
-                    type="text"
-                    className="todo-item-input"
-                    onBlur={(event) => updateTodoTitle(event, item.id)}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter") {
-                        updateTodoTitle(event, item.id);
-                      } else if (event.key === "Escape") {
-                        cancelEditing(item.id);
-                      }
-                    }}
-                    defaultValue={item.title}
-                    autoFocus
-                  />
-                ) : (
-                  <span
-                    className={`todo-item-label ${
-                      item.isComplete && "line-through"
-                    }`}
-                    onDoubleClick={() => markAsEditing(item.id)}
-                  >
-                    {item.title}
-                  </span>
-                )}
+        {todos.length > 0 ? (
+          <>
+            <TodoList
+              todos={todos}
+              toggleCheckItem={toggleCheckItem}
+              markAsEditing={markAsEditing}
+              updateTodoTitle={updateTodoTitle}
+              cancelEditing={cancelEditing}
+              handleDelete={handleDelete}
+            />
+            <div className="check-all-container">
+              <div>
+                <div className="button">Check All</div>
               </div>
-              <button
-                className="x-button"
-                onClick={() => handleDelete(item.id)}
-              >
-                <svg
-                  className="x-button-icon"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </li>
-          ))}
-        </ul>
-
-        <div className="check-all-container">
-          <div>
-            <div className="button">Check All</div>
-          </div>
-          <span>3 items remaining</span>
-        </div>
-        <div className="other-buttons-container">
-          <div>
-            <button className="button filter-button filter-button-active">
-              All
-            </button>
-            <button className="button filter-button">Active</button>
-            <button className="button filter-button">Completed</button>
-          </div>
-          <div>
-            <button className="button">Clear completed</button>
-          </div>
-        </div>
+              <span>3 items remaining</span>
+            </div>
+            <div className="other-buttons-container">
+              <div>
+                <button className="button filter-button filter-button-active">
+                  All
+                </button>
+                <button className="button filter-button">Active</button>
+                <button className="button filter-button">Completed</button>
+              </div>
+              <div>
+                <button className="button">Clear completed</button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <NoTodos />
+        )}
       </div>
     </div>
   );
