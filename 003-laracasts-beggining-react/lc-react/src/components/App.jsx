@@ -83,6 +83,22 @@ function App() {
     setTodos(updatedTodos);
   };
 
+  const remainingItems = () => {
+    return todos.filter((item) => !item.isComplete).length;
+  };
+
+  const clearCompleted = () => {
+    setTodos([...todos].filter((item) => !item.isComplete));
+  };
+
+  const checkAll = () => {
+    const checkedItens = todos.map((item) => {
+      item.isComplete = true;
+      return item;
+    });
+    setTodos(checkedItens);
+  };
+
   return (
     <div className="todo-app-container">
       <div className="todo-app">
@@ -98,25 +114,10 @@ function App() {
               updateTodoTitle={updateTodoTitle}
               cancelEditing={cancelEditing}
               handleDelete={handleDelete}
+              remainingItems={remainingItems}
+              clearCompleted={clearCompleted}
+              checkAll={checkAll}
             />
-            <div className="check-all-container">
-              <div>
-                <div className="button">Check All</div>
-              </div>
-              <span>3 items remaining</span>
-            </div>
-            <div className="other-buttons-container">
-              <div>
-                <button className="button filter-button filter-button-active">
-                  All
-                </button>
-                <button className="button filter-button">Active</button>
-                <button className="button filter-button">Completed</button>
-              </div>
-              <div>
-                <button className="button">Clear completed</button>
-              </div>
-            </div>
           </>
         ) : (
           <NoTodos />
