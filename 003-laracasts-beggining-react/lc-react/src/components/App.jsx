@@ -2,10 +2,15 @@ import "../reset.css";
 import "../App.css";
 import TodoForm from "./TodoForm";
 import NoTodos from "./NoTodos";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TodoList from "./TodoList";
 
 function App() {
+  // hook para ter uma referência para um elemento
+  const nameInputEl = useRef(null);
+
+  const [name, setName] = useState("");
+
   const [todos, setTodos] = useState([
     {
       id: 1,
@@ -105,9 +110,30 @@ function App() {
     if (filter === "completed") return todos.filter((todo) => todo.isComplete);
   };
 
+  // hook para quando state(s) alterar(em), quando componentes forem montados
+  useEffect(() => {
+    // callback chamado
+    console.log("todos ou o nome foram alterados...");
+  }, [todos, name]);
+
   return (
     <div className="todo-app-container">
       <div className="todo-app">
+        <div className="name-container">
+          <h2>What is your name?</h2>
+          <form action="#">
+            <input
+              type="text"
+              className="todo-input"
+              placeholder="Tell me your name"
+              value={name}
+              ref={nameInputEl}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </form>
+          {name && <p className="name-label">Hello, {name}</p>}
+        </div>
+
         <h2>Todo App</h2>
         <TodoForm addTodo={addTodo} />
 
