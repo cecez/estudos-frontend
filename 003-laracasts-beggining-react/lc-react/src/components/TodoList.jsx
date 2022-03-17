@@ -13,7 +13,7 @@ TodoList.propTypes = {
   updateTodoTitle: PropTypes.func.isRequired,
   cancelEditing: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
-  remainingItems: PropTypes.func.isRequired,
+  remainingItems: PropTypes.number.isRequired,
   clearCompleted: PropTypes.func.isRequired,
   checkAll: PropTypes.func.isRequired,
 };

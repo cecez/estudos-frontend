@@ -2,7 +2,7 @@ import "../reset.css";
 import "../App.css";
 import TodoForm from "./TodoForm";
 import NoTodos from "./NoTodos";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import TodoList from "./TodoList";
 
 function App() {
@@ -88,9 +88,14 @@ function App() {
     setTodos(updatedTodos);
   };
 
-  const remainingItems = () => {
+  const remainingItemsCalculation = () => {
+    // simulando algo expensivo
+    console.log("fui chamado, calculando algo custoso...");
     return todos.filter((item) => !item.isComplete).length;
   };
+
+  // returns a memoized value (caching a value)
+  const remainingItems = useMemo(remainingItemsCalculation, [todos]);
 
   const clearCompleted = () => {
     setTodos([...todos].filter((item) => !item.isComplete));
@@ -114,7 +119,11 @@ function App() {
   useEffect(() => {
     // callback chamado
     console.log("todos ou o nome foram alterados...");
-  }, [todos, name]);
+
+    return function cleanup() {
+      console.log("cleaning up...");
+    };
+  }, []);
 
   return (
     <div className="todo-app-container">
