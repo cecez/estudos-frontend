@@ -6,7 +6,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import TodoList from "./TodoList";
 
 function App() {
-
   // hook para ter uma referência para um elemento
   const nameInputEl = useRef(null);
 
@@ -118,6 +117,9 @@ function App() {
 
   // hook para quando state(s) alterar(em), quando componentes forem montados
   useEffect(() => {
+    // carrega dado do storage se houver
+    setName(JSON.parse(localStorage.getItem("name")) ?? "");
+
     // callback chamado
     console.log("todos ou o nome foram alterados...");
 
@@ -125,6 +127,11 @@ function App() {
       console.log("cleaning up...");
     };
   }, []);
+
+  const handleInputName = (event) => {
+    setName(event.target.value);
+    localStorage.setItem("name", JSON.stringify(event.target.value));
+  };
 
   return (
     <div className="todo-app-container">
@@ -138,7 +145,7 @@ function App() {
               placeholder="Tell me your name"
               value={name}
               ref={nameInputEl}
-              onChange={(e) => setName(e.target.value)}
+              onChange={handleInputName}
             />
           </form>
           {name && <p className="name-label">Hello, {name}</p>}
