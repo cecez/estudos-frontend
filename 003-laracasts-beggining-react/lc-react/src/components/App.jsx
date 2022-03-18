@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import TodoList from "./TodoList";
 
 function App() {
+
   // hook para ter uma referência para um elemento
   const nameInputEl = useRef(null);
 
