@@ -2,30 +2,16 @@ import "../reset.css";
 import "../App.css";
 import TodoForm from "./TodoForm";
 import NoTodos from "./NoTodos";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 import TodoList from "./TodoList";
 
 function App() {
   // hook para ter uma referência para um elemento
   const nameInputEl = useRef(null);
-
-  const [name, setName] = useState("");
-
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      title: "Meu primeiro item",
-      isComplete: false,
-      isEditing: false,
-    },
-    {
-      id: 2,
-      title: "Segundo todo",
-      isComplete: true,
-      isEditing: false,
-    },
-  ]);
-  const [idForTodo, setIdForTodo] = useState(3);
+  const [name, setName] = useLocalStorage("name", "");
+  const [todos, setTodos] = useLocalStorage("todos", []);
+  const [idForTodo, setIdForTodo] = useLocalStorage("idForTodo", 1);
 
   const addTodo = (title) => {
     setTodos([
@@ -117,9 +103,7 @@ function App() {
 
   // hook para quando state(s) alterar(em), quando componentes forem montados
   useEffect(() => {
-    // carrega dado do storage se houver
-    setName(JSON.parse(localStorage.getItem("name")) ?? "");
-
+    
     // callback chamado
     console.log("todos ou o nome foram alterados...");
 
@@ -130,7 +114,6 @@ function App() {
 
   const handleInputName = (event) => {
     setName(event.target.value);
-    localStorage.setItem("name", JSON.stringify(event.target.value));
   };
 
   return (
