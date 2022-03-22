@@ -5,6 +5,7 @@ import NoTodos from "./NoTodos";
 import { useEffect, useMemo, useRef } from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
 import TodoList from "./TodoList";
+import { TodosContext } from "../context/TodosContext";
 
 function App() {
   // hook para ter uma referência para um elemento
@@ -12,18 +13,6 @@ function App() {
   const [name, setName] = useLocalStorage("name", "");
   const [todos, setTodos] = useLocalStorage("todos", []);
   const [idForTodo, setIdForTodo] = useLocalStorage("idForTodo", 1);
-
-  const addTodo = (title) => {
-    setTodos([
-      ...todos,
-      {
-        id: idForTodo,
-        title: title,
-        isComplete: false,
-      },
-    ]);
-    setIdForTodo((previousId) => previousId + 1);
-  };
 
   const handleDelete = (todoId) => {
     setTodos([...todos].filter((item) => item.id !== todoId));
@@ -74,14 +63,7 @@ function App() {
     setTodos(updatedTodos);
   };
 
-  const remainingItemsCalculation = () => {
-    // simulando algo expensivo
-    console.log("fui chamado, calculando algo custoso...");
-    return todos.filter((item) => !item.isComplete).length;
-  };
-
-  // returns a memoized value (caching a value)
-  const remainingItems = useMemo(remainingItemsCalculation, [todos]);
+  
 
   const clearCompleted = () => {
     setTodos([...todos].filter((item) => !item.isComplete));
@@ -103,7 +85,6 @@ function App() {
 
   // hook para quando state(s) alterar(em), quando componentes forem montados
   useEffect(() => {
-    
     // callback chamado
     console.log("todos ou o nome foram alterados...");
 
@@ -117,46 +98,47 @@ function App() {
   };
 
   return (
-    <div className="todo-app-container">
-      <div className="todo-app">
-        <div className="name-container">
-          <h2>What is your name?</h2>
-          <form action="#">
-            <input
-              type="text"
-              className="todo-input"
-              placeholder="Tell me your name"
-              value={name}
-              ref={nameInputEl}
-              onChange={handleInputName}
-            />
-          </form>
-          {name && <p className="name-label">Hello, {name}</p>}
+    <TodosContext.Provider value={{ todos, setTodos, idForTodo, setIdForTodo }}>
+      <div className="todo-app-container">
+        <div className="todo-app">
+          <div className="name-container">
+            <h2>What is your name?</h2>
+            <form action="#">
+              <input
+                type="text"
+                className="todo-input"
+                placeholder="Tell me your name"
+                value={name}
+                ref={nameInputEl}
+                onChange={handleInputName}
+              />
+            </form>
+            {name && <p className="name-label">Hello, {name}</p>}
+          </div>
+
+          <h2>Todo App</h2>
+          <TodoForm />
+
+          {todos.length > 0 ? (
+            <>
+              <TodoList
+                todos={todos}
+                toggleCheckItem={toggleCheckItem}
+                markAsEditing={markAsEditing}
+                updateTodoTitle={updateTodoTitle}
+                cancelEditing={cancelEditing}
+                handleDelete={handleDelete}
+                clearCompleted={clearCompleted}
+                checkAll={checkAll}
+                todosFiltered={todosFiltered}
+              />
+            </>
+          ) : (
+            <NoTodos />
+          )}
         </div>
-
-        <h2>Todo App</h2>
-        <TodoForm addTodo={addTodo} />
-
-        {todos.length > 0 ? (
-          <>
-            <TodoList
-              todos={todos}
-              toggleCheckItem={toggleCheckItem}
-              markAsEditing={markAsEditing}
-              updateTodoTitle={updateTodoTitle}
-              cancelEditing={cancelEditing}
-              handleDelete={handleDelete}
-              remainingItems={remainingItems}
-              clearCompleted={clearCompleted}
-              checkAll={checkAll}
-              todosFiltered={todosFiltered}
-            />
-          </>
-        ) : (
-          <NoTodos />
-        )}
       </div>
-    </div>
+    </TodosContext.Provider>
   );
 }
 export default App;
