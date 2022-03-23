@@ -1,12 +1,18 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useContext } from "react";
+import { TodosContext } from "../context/TodosContext";
 
-ClearCompleted.propTypes = {
-    clearCompleted: PropTypes.func.isRequired
-};
+function ClearCompleted() {
+  const { setTodos, todos } = useContext(TodosContext);
 
-function ClearCompleted(props) {
-  return <button onClick={props.clearCompleted} className="button">Clear completed</button>;
+  const clearCompleted = () => {
+    setTodos([...todos].filter((item) => !item.isComplete));
+  };
+
+  return (
+    <button onClick={clearCompleted} className="button">
+      Clear completed
+    </button>
+  );
 }
 
 export default ClearCompleted;

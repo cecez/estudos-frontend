@@ -2,7 +2,7 @@ import "../reset.css";
 import "../App.css";
 import TodoForm from "./TodoForm";
 import NoTodos from "./NoTodos";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
 import TodoList from "./TodoList";
 import { TodosContext } from "../context/TodosContext";
@@ -13,71 +13,9 @@ function App() {
   const [name, setName] = useLocalStorage("name", "");
   const [todos, setTodos] = useLocalStorage("todos", []);
   const [idForTodo, setIdForTodo] = useLocalStorage("idForTodo", 1);
+  const [filter, setFilter] = useState("all");
 
-  const handleDelete = (todoId) => {
-    setTodos([...todos].filter((item) => item.id !== todoId));
-  };
-
-  const toggleCheckItem = (todoId) => {
-    const updatedTodos = todos.map((item) => {
-      if (item.id === todoId) {
-        item.isComplete = !item.isComplete;
-      }
-      return item;
-    });
-    setTodos(updatedTodos);
-  };
-
-  const markAsEditing = (todoId) => {
-    const updatedTodos = todos.map((item) => {
-      if (item.id === todoId) {
-        item.isEditing = true;
-      }
-      return item;
-    });
-    setTodos(updatedTodos);
-  };
-
-  const cancelEditing = (todoId) => {
-    const updatedTodos = todos.map((item) => {
-      if (item.id === todoId) {
-        item.isEditing = false;
-      }
-      return item;
-    });
-    setTodos(updatedTodos);
-  };
-
-  const updateTodoTitle = (event, id) => {
-    const updatedTodos = todos.map((item) => {
-      if (item.id === id) {
-        if (event.target.value.trim().length === 0) {
-          item.isEditing = false;
-          return item;
-        }
-        item.title = event.target.value;
-        item.isEditing = false;
-      }
-      return item;
-    });
-    setTodos(updatedTodos);
-  };
-
-  
-
-  const clearCompleted = () => {
-    setTodos([...todos].filter((item) => !item.isComplete));
-  };
-
-  const checkAll = () => {
-    const checkedItens = todos.map((item) => {
-      item.isComplete = true;
-      return item;
-    });
-    setTodos(checkedItens);
-  };
-
-  const todosFiltered = (filter) => {
+  const todosFiltered = () => {
     if (filter === "all") return todos;
     if (filter === "active") return todos.filter((todo) => !todo.isComplete);
     if (filter === "completed") return todos.filter((todo) => todo.isComplete);
@@ -98,7 +36,7 @@ function App() {
   };
 
   return (
-    <TodosContext.Provider value={{ todos, setTodos, idForTodo, setIdForTodo }}>
+    <TodosContext.Provider value={{ todos, setTodos, idForTodo, setIdForTodo, todosFiltered, filter, setFilter }}>
       <div className="todo-app-container">
         <div className="todo-app">
           <div className="name-container">
@@ -123,13 +61,6 @@ function App() {
             <>
               <TodoList
                 todos={todos}
-                toggleCheckItem={toggleCheckItem}
-                markAsEditing={markAsEditing}
-                updateTodoTitle={updateTodoTitle}
-                cancelEditing={cancelEditing}
-                handleDelete={handleDelete}
-                clearCompleted={clearCompleted}
-                checkAll={checkAll}
                 todosFiltered={todosFiltered}
               />
             </>
