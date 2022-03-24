@@ -5,13 +5,13 @@ import ClearCompleted from "./ClearCompleted";
 import CheckAll from "./CheckAll";
 import useToggle from "../hooks/useToggle";
 import { TodosContext } from "../context/TodosContext";
-
+import { CSSTransition } from "react-transition-group";
 
 function TodoList(props) {
   const { todosFiltered, todos, setTodos } = useContext(TodosContext);
   const [isFeatureOneVisible, toggleFeatureOne] = useToggle(true);
   const [isFeatureTwoVisible, toggleFeatureTwo] = useToggle(true);
-  
+
   const handleDelete = (todoId) => {
     setTodos([...todos].filter((item) => item.id !== todoId));
   };
@@ -98,10 +98,7 @@ function TodoList(props) {
                 </span>
               )}
             </div>
-            <button
-              className="x-button"
-              onClick={() => handleDelete(item.id)}
-            >
+            <button className="x-button" onClick={() => handleDelete(item.id)}>
               <svg
                 className="x-button-icon"
                 fill="none"
@@ -129,23 +126,33 @@ function TodoList(props) {
         </button>
       </div>
 
-      {isFeatureOneVisible && (
+      <CSSTransition
+        in={isFeatureOneVisible}
+        timeout={300}
+        classNames="slide-vertical"
+        unmountOnExit
+      >
         <div className="check-all-container">
           <div>
             <CheckAll />
           </div>
           <TodoItemsRemaining />
         </div>
-      )}
+      </CSSTransition>
 
-      {isFeatureTwoVisible && (
+      <CSSTransition
+        in={isFeatureTwoVisible}
+        timeout={300}
+        classNames="slide-vertical"
+        unmountOnExit
+      >
         <div className="other-buttons-container">
           <TodoFilters />
           <div>
             <ClearCompleted />
           </div>
         </div>
-      )}
+        </CSSTransition>
     </>
   );
 }
