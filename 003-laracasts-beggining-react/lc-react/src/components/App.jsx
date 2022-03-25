@@ -36,38 +36,43 @@ function App() {
   };
 
   return (
-    <TodosContext.Provider value={{ todos, setTodos, idForTodo, setIdForTodo, todosFiltered, filter, setFilter }}>
-      <div className="todo-app-container">
-        <div className="todo-app">
-          <div className="name-container">
-            <h2>What is your name?</h2>
-            <form action="#">
-              <input
-                type="text"
-                className="todo-input"
-                placeholder="Tell me your name"
-                value={name}
-                ref={nameInputEl}
-                onChange={handleInputName}
-              />
-            </form>
-            {name && <p className="name-label">Hello, {name}</p>}
-          </div>
-
-          <h2>Todo App</h2>
-          <TodoForm />
-
-          {todos.length > 0 ? (
-            <>
-              <TodoList
-                todos={todos}
-                todosFiltered={todosFiltered}
-              />
-            </>
-          ) : (
-            <NoTodos />
-          )}
+    <TodosContext.Provider
+      value={{
+        todos,
+        setTodos,
+        idForTodo,
+        setIdForTodo,
+        todosFiltered,
+        filter,
+        setFilter,
+      }}
+    >
+      <div className="todo-app">
+        <div className="name-container">
+          <h2>What is your name?</h2>
+          <form action="#">
+            <input
+              type="text"
+              className="todo-input"
+              placeholder="Tell me your name"
+              value={name}
+              ref={nameInputEl}
+              onChange={handleInputName}
+            />
+          </form>
+          {name && <p className="name-label">Hello, {name}</p>}
         </div>
+
+        <h2>Todo App</h2>
+        <TodoForm />
+
+        {todos.length > 0 ? (
+          <>
+            <TodoList todos={todos} todosFiltered={todosFiltered} />
+          </>
+        ) : (
+          <NoTodos />
+        )}
       </div>
     </TodosContext.Provider>
   );
