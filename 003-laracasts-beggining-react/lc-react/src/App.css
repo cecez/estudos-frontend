@@ -163,6 +163,10 @@ h2 {
   margin-top: 15px;
 }
 
+.active { 
+  font-weight: bold;
+}
+
 /* Transitions */
 .slide-vertical-enter {
   opacity: 0;
