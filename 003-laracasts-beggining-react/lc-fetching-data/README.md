@@ -1,10 +1,6 @@
-```
-- plugin vscode: eslint
-- plugin vscode: Prettier - Code formatter
+# Getting Started with Create React App
 
-npm start
-
-```
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
