@@ -4,6 +4,7 @@ import { useState } from "react";
 import IconOpen from "./IconOpen";
 import IconClosed from "./IconClosed";
 import { formatDistance } from "date-fns";
+import "./Markdown.css";
 
 export default function Issues() {
   const [filter, setFilter] = useState("open");
@@ -74,7 +75,7 @@ export default function Issues() {
                   {issue.state === "open" && <IconOpen />}
                   {issue.state === "closed" && <IconClosed />}
                   <div className="issues-title">
-                    <Link to={`/issues/1`}>{issue.title}</Link>
+                    <Link to={`/issues/${issue.number}`}>{issue.title}</Link>
                     <div className="issues-title-details">
                       #{issue.number} opened{" "}
                       {formatDistance(new Date(issue.created_at), new Date(), {
@@ -85,7 +86,7 @@ export default function Issues() {
                   </div>
                 </div>
                 {issue.comments > 0 && (
-                  <Link to={`/issues/1`} className="comments-count-container">
+                  <Link to={`/issues/${issue.number}`} className="comments-count-container">
                     <svg
                       className="octicon octicon-comment v-align-middle"
                       viewBox="0 0 16 16"
